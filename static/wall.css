@@ -1,0 +1,100 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    font-family: Roboto, sans-serif;
+}
+p{
+    display: inline-block;
+}
+h1{
+    display: inline-block;
+    margin-top: 0.65em;
+    margin-left: 1.5em;
+}
+#container{
+    width: 1300px;
+    height: auto;
+    padding: 20px 20px 40px;
+    margin: 0 auto;
+}
+#header{
+    background-color: #6699ff;
+    color: #eeeeee;
+    height: 5em;
+    width: 1340px;
+    margin: 1em auto 0;
+}
+#header p{
+    vertical-align: top;
+    margin: 2.15em 0 0;
+    display: inline-block;
+}
+#header ul{
+    list-style: none;
+    display: inline-block;
+    vertical-align: top;
+    margin: 2.1em 1em 0 1.5em;
+    float: right;
+}
+#header li{
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 1em;
+}
+#name{
+    margin-top: -0.17em;
+}
+#header a{
+    color: #eeeeee;
+    font-size: 0.75em;
+}
+textarea{
+    resize: none;
+    padding: 1em;
+    font-size: 1em;
+    outline: none;
+}
+#message{
+    margin: 1em 2em 0em;
+}
+#message input{
+    margin: 1em 0 0 66.2em;
+    font-size: 1em;
+    height: 2.2em;
+    width: 10em;
+    background-color: white;
+}
+.post{
+    margin: 3em 1.5em 5em;
+}
+.post h4{
+    font-size: 1.2em;
+}
+.post input{
+    float: right;
+    margin-right: 4em;
+}
+.post h4 span{
+    font-size: 0.9em;
+    display: inline;
+}
+.post p{
+    margin: 0.75em 1.5em;
+    display: block;
+}
+.comments{
+    margin: 0.75em 2.5em;
+}
+.comment_button{
+    margin: 1em 0 0 62em;
+    font-size: 1em;
+    height: 2.2em;
+    width: 10em;
+    display: block;
+    background-color: white;
+}
+.delete{
+    vertical-align: top;
+}

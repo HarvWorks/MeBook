@@ -1,0 +1,73 @@
+<html>
+    <head>
+        <title>Me Book</title>
+        <link rel="stylesheet" type = "text/css" href="{{url_for('static', filename='wall.css')}}">
+        <script type="text/javascript" src="{{url_for('static', filename='wall.js')}}">
+        </script>
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    </head>
+    <body>
+        <div id="header">
+            <h1>{{session['first_name']}}'s Wall</h1>
+                <ul>
+                    <li id="name">Welcome {{session['first_name']}} {{session['last_name']}}</li>
+                    <li><a href="/logout">Logout</a></li>
+                </ul>
+        </div>
+        <div id="container">
+            <form id="message" action="/post/message" method="post">
+                <textarea name="message" rows="7" cols="148" placeholder="Post a message on the wall!"></textarea>
+                <input type="submit" value="Post on Wall">
+            </form>
+                {% for message in messages %}
+                    <div class="post">
+                        {% if message['user_id'] == session['id'] %}
+                            <form class="delete" action="/delete_message/{{message['id']}}" method="post">
+                                <input type="submit" value="Delete Post">
+                            </form>
+                        {% endif %}
+                        <h4>
+                            Posted by
+                            {{message['first_name']}}
+                            {{message['last_name']}}
+                            on <span>{{message['created_at']}}
+                            {%if not message['updated_at'] == message['created_at']:%}
+                                Last updated at: {{message['updated_at']}}
+                            {% endif %}</span>:
+                        </h4>
+                        <p>
+                            {{message['message']}}
+                        </p>
+                        <div class="comments">
+                            {% for comment in comments %}
+                                {% if comment['message_id'] == message['id'] %}
+                                {% if comment['user_id'] == session['id'] %}
+                                    <form class="delete" action="/delete_comment/{{comment['id']}}" method="post">
+                                        <input type="submit" value="Delete Comment">
+                                    </form>
+                                {% endif %}
+                                    <h4>
+                                        Posted by
+                                        {{comment['first_name']}}
+                                        {{comment['last_name']}}
+                                        on <span>{{comment['created_at']}}
+                                        {%if not comment['updated_at'] == comment['created_at']:%}
+                                            Last updated at: {{comment['updated_at']}}
+                                        {% endif %}</span>
+                                        :
+                                    </h4>
+                                    <p>
+                                        {{comment['comment']}}
+                                    </p>
+                                {% endif %}
+                            {%endfor%}
+                            <form action="/post/comment/{{message['id']}}" method="post">
+                                <textarea name="comment" rows="5" cols="140" placeholder="Comment on {{message['first_name']}} {{message['last_name']}}'s post!"></textarea>
+                                <input type="submit" value="Post your comment" class="comment_button">
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+        </div>
+    </body>
+</html>

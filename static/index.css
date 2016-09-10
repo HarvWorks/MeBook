@@ -1,0 +1,49 @@
+#register{
+    width: 400px;
+    height: auto;
+    padding: 20px;
+    margin: 3em auto;
+    display: inline-block;
+}
+ul{
+    list-style: none;
+    vertical-align: top;
+    margin: 0 0 0 0.5em;
+    padding: 0;
+    display: inline-block;
+}
+li{
+    margin: 1em 0;
+}
+form{
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 0.2em;
+}
+.text{
+    margin-top: 0.23em;
+}
+.text li{
+    margin: 1.05em 0;
+}
+h1{
+    text-align: center;
+    font-size: 100px;
+    margin-bottom: 0em;
+}
+#disp{
+    text-align: right;
+    margin-left: 8em;
+}
+#login{
+    width: 400px;
+    height: auto;
+    padding: 20px;
+    margin: 3em auto;
+    display: inline-block;
+    vertical-align: top;
+}
+.button{
+    width: 100px;
+    height: 25px;
+}
