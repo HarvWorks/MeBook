@@ -1,8 +1,8 @@
 #register{
-    width: 400px;
+    width: 600px;
     height: auto;
     padding: 20px;
-    margin: 3em auto;
+    margin: 1em auto;
     display: inline-block;
 }
 ul{
@@ -33,7 +33,6 @@ h1{
 }
 #disp{
     text-align: right;
-    margin-left: 8em;
 }
 #login{
     width: 400px;

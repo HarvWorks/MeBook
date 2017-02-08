@@ -16,8 +16,16 @@
         </div>
         <div id="container">
             <form id="message" action="/post/message" method="post">
-                <textarea name="message" rows="7" cols="148" placeholder="Post a message on the wall!"></textarea>
+                <textarea id ="messageBox" name="message" rows="7" cols="148" placeholder="Post a message on the wall!"></textarea>
                 <input type="submit" value="Post on Wall">
+                <script type="text/javascript">
+                    document.getElementById("messageBox").addEventListener('keypress', function (e) {
+                        var key = e.which || e.keyCode;
+                        if (key === 13) { // 13 is enter
+                            document.getElementById("message").submit()
+                        }
+                    });
+                </script>
             </form>
                 {% for message in messages %}
                     <div class="post">
@@ -61,10 +69,18 @@
                                     </p>
                                 {% endif %}
                             {%endfor%}
-                            <form action="/post/comment/{{message['id']}}" method="post">
-                                <textarea name="comment" rows="5" cols="140" placeholder="Comment on {{message['first_name']}} {{message['last_name']}}'s post!"></textarea>
+                            <form id ="comment{{message['id']}}" action="/post/comment/{{message['id']}}" method="post">
+                                <textarea id ="commentBox{{message['id']}}" name="comment" rows="5" cols="140" placeholder="Comment on {{message['first_name']}} {{message['last_name']}}'s post!"></textarea>
                                 <input type="submit" value="Post your comment" class="comment_button">
                             </form>
+                            <script type="text/javascript">
+                                document.getElementById("commentBox{{message['id']}}").addEventListener('keypress', function (e) {
+                                    var key = e.which || e.keyCode;
+                                    if (key === 13) { // 13 is enter
+                                      document.getElementById("comment{{message['id']}}").submit()
+                                    }
+                                });
+                            </script>
                         </div>
                     </div>
                 {% endfor %}

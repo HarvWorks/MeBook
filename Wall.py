@@ -1,4 +1,6 @@
-from flask import  Flask, render_template, redirect, request, session, flash
+from flask import  Flask, render_template, redirect, request, session, flash, make_response
+from functools import wraps, update_wrapper
+from datetime import datetime
 # import the Connector function
 from mysqlconnection import MySQLConnector
 from flask.ext.bcrypt import Bcrypt
@@ -21,12 +23,30 @@ uppercase = re.compile("[A-Z]+")
 number = re.compile('[0-9]+')
 app = Flask(__name__)
 app.secret_key = "!ds^anxfdws*&ds^sjkss"
+
+
+
+def nocache(view):
+    @wraps(view)
+    def no_cache(*args, **kwargs):
+        response = make_response(view(*args, **kwargs))
+        response.headers['Last-Modified'] = datetime.now()
+        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '-1'
+        return response
+
+    return update_wrapper(no_cache, view)
+
+
 @app.route('/', methods=['GET'])
+@nocache
 def index():
     if "first_name" in session:
         return redirect('/dashboard')
     return render_template("index.html")
 @app.route('/register', methods=['POST'])
+@nocache
 def register():
     flash(request.form['email'],'email')
     flash(request.form['first_name'],"first_name")
@@ -90,6 +110,7 @@ def register():
     return redirect('/')
 
 @app.route('/login', methods=['POST'])
+@nocache
 def login():
     success = 0
     query = "SELECT * FROM users WHERE email = :email"
@@ -114,13 +135,17 @@ def login():
     return redirect('/')
 
 @app.route('/logout')
+@nocache
 def logout():
     flash( session['first_name'] + " " + session['last_name'] + " has logout!","message")
     session.clear()
     return redirect('/')
 
 @app.route('/dashboard', methods=['GET'])
+@nocache
 def dashboard():
+    if not "first_name" in session:
+        return redirect ('/')
     query = "SELECT messages.id, messages.message, DATE_FORMAT(messages.created_at,'%b %d %Y') as created_at, DATE_FORMAT(messages.updated_at,'%b %d %Y') as updated_at, messages.user_id, users.first_name, users.last_name FROM messages JOIN users ON users.id = messages.user_id ORDER BY messages.created_at DESC;"
     messages = mysql.query_db(query)
     query = "SELECT comments.id, comments.comment, DATE_FORMAT(comments.created_at,'%b %d %Y') as created_at, DATE_FORMAT(comments.updated_at,'%b %d %Y') as updated_at, comments.message_id, comments.user_id, users.first_name, users.last_name from comments JOIN users ON users.id = comments.user_id ORDER BY comments.created_at ASC"
@@ -128,6 +153,7 @@ def dashboard():
     return render_template('wall.html', messages = messages, comments = comments)
 
 @app.route("/post/message", methods=['POST'])
+@nocache
 def message():
     query = "INSERT INTO messages (message, created_at, updated_at, user_id) VALUES (:message, NOW(), NOW(), :id)"
     data = {'message': request.form['message'], 'id': session['id']}
@@ -135,6 +161,7 @@ def message():
     return redirect('/dashboard')
 
 @app.route("/post/comment/<message_id>", methods=['POST'])
+@nocache
 def comment(message_id):
     query = "INSERT INTO comments (comment, created_at, updated_at, user_id, message_id) VALUES (:comment, NOW(), NOW(), :user_id, :message_id)"
     data = {'comment': request.form['comment'], 'user_id': session['id'], 'message_id': message_id}
@@ -142,6 +169,7 @@ def comment(message_id):
     return redirect('/dashboard')
 
 @app.route("/delete_comment/<comment_id>", methods=['POST'])
+@nocache
 def del_comment(comment_id):
     query = "DELETE FROM comments WHERE id = :id"
     data = {'id': comment_id}
@@ -150,6 +178,7 @@ def del_comment(comment_id):
     return redirect('/dashboard')
 
 @app.route("/delete_message/<message_id>", methods=['POST'])
+@nocache
 def del_message(message_id):
     query = "DELETE FROM comments WHERE message_id = :id"
     data = {'id': message_id}
